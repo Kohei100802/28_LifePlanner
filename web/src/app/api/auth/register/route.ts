@@ -1,4 +1,4 @@
-import { prisma } from "@/src/shared/lib/prisma";
+import { prisma } from "@/shared/lib/prisma";
 import { NextResponse } from "next/server";
 import { z } from "zod";
 import bcrypt from "bcrypt";
