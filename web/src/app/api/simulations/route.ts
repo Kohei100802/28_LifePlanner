@@ -1,6 +1,6 @@
-import { prisma } from "@/src/shared/lib/prisma";
+import { prisma } from "@/shared/lib/prisma";
 import { getServerSession } from "next-auth";
-import { authOptions } from "@/src/shared/lib/auth";
+import { authOptions } from "@/shared/lib/auth";
 import { NextResponse } from "next/server";
 import { z } from "zod";
 
