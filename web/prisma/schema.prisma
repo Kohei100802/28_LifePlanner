@@ -1,0 +1,52 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+  output   = "../src/generated/prisma"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id            String           @id @default(cuid())
+  email         String           @unique
+  name          String?
+  passwordHash  String
+  createdAt     DateTime         @default(now())
+  updatedAt     DateTime         @updatedAt
+  simulations   Simulation[]
+}
+
+model Simulation {
+  id            String          @id @default(cuid())
+  user          User            @relation(fields: [userId], references: [id])
+  userId        String
+  title         String
+  baseAge       Int             // シミュレーション開始年齢（例：20）
+  createdAt     DateTime        @default(now())
+  updatedAt     DateTime        @updatedAt
+  entries       SimEntry[]
+}
+
+// 年齢ごとの入力項目。複数カテゴリ(収入/支出)に対応
+model SimEntry {
+  id            String     @id @default(cuid())
+  simulation    Simulation @relation(fields: [simulationId], references: [id])
+  simulationId  String
+  age           Int        // 指定年齢
+  kind          EntryKind  // income / expense
+  label         String     // 任意の名称（給与、家賃など）
+  amount        Int        // 金額（円）
+  createdAt     DateTime   @default(now())
+  updatedAt     DateTime   @updatedAt
+  @@index([simulationId, age])
+}
+
+enum EntryKind {
+  income
+  expense
+}
